@@ -1,0 +1,12 @@
+{
+  "name": "com.gilzoide.playerloophelper",
+  "version": "0.1.0",
+  "displayName": "PlayerLoopHelper",
+  "description": "Simple helper class for registering/unregistering systems in the PlayerLoop",
+  "unity": "2019.3",
+  "license": "Unlicense",
+  "author": {
+    "name": "gilzoide",
+    "url": "https://github.com/gilzoide"
+  }
+}
