@@ -1,3 +1,11 @@
+/**
+ * PlayerLoopHelper: Simple helper class for registering/unregistering systems in Unity's PlayerLoop. 
+ *
+ * Project URL: https://github.com/gilzoide/unity-playerloophelper
+ * 
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org/>
+ */
 using System;
 using UnityEngine.LowLevel;
 
