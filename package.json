@@ -5,6 +5,8 @@
   "description": "Simple helper class for registering/unregistering systems in the PlayerLoop",
   "unity": "2019.3",
   "license": "Unlicense",
+  "licensesUrl": "https://github.com/gilzoide/unity-playerloophelper/blob/main/UNLICENSE",
+  "keywords": ["PlayerLoop"],
   "author": {
     "name": "gilzoide",
     "url": "https://github.com/gilzoide"
