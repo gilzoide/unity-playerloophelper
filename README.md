@@ -6,10 +6,10 @@ Single file helper class for registering/unregistering systems in [Unity](https:
 ## How to install
 Either:
 
-* In [Package Manager Window](https://docs.unity3d.com/Manual/upm-ui.html)
+- In [Package Manager Window](https://docs.unity3d.com/Manual/upm-ui.html)
   install using this repository's [Git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html):
   `https://github.com/gilzoide/unity-playerloophelper.git`
-* Copy [PlayerLoopHelper.cs](Runtime/PlayerLoopHelper.cs) anywhere inside your project.
+- Copy [PlayerLoopHelper.cs](Runtime/PlayerLoopHelper.cs) anywhere inside your project.
 
 
 ## Usage example
@@ -46,7 +46,7 @@ public static class MainThreadDispatcher
             // "FirstChildOf Update": this system will run as the first step
             // in the Update phase, before other components
             // For more phases, check out UnityEngine.PlayerLoop subclasses
-            // (https://docs.unity3d.com/ScriptReference/PlayerLoop.Update.html)
+            // (e.g.: https://docs.unity3d.com/ScriptReference/PlayerLoop.Update.html)
             InsertPosition.FirstChildOf,
             typeof(UnityEngine.PlayerLoop.Update),
             // Callback that will run once per frame
@@ -73,3 +73,25 @@ public static class MainThreadDispatcher
     }
 }
 ```
+
+
+## API
+`enum InsertPosition`
+  - `Before`: insert new system before specified one, as its sibling
+  - `After`: insert new system after specified one, as its sibling
+  - `FirstChildOf`: insert new system as the first child of specified one
+  - `LastChildOf`: insert new system as the last child of specified one
+
+`class PlayerLoopSystemHelper`
+  - `static bool Register(Type type, InsertPosition position, Type anchorType, PlayerLoopSystem.UpdateFunction action)`
+
+    Registers a `PlayerLoopSystem` with the given `type` and `action` in the `specified` position
+    relative to `anchorType`.
+
+    Returns `true` if `anchorType` was found and system was inserted successfully.
+
+  - `static bool Unregister(Type type)`
+
+    Unregisters a `PlayerLoopSystem`.
+
+    Returns `true` if `type` was found and remove successfully.
