@@ -13,9 +13,13 @@ namespace PlayerLoopHelper
 {
 	public enum InsertPosition
 	{
+		/// Insert system right before the specified one, as a sibling
 		Before,
+		/// Insert system right after the specified one, as a sibling
 		After,
+		/// Insert system as the first child of the specified one
 		FirstChildOf,
+		/// Insert system as the last child of the specified one
 		LastChildOf,
 	}
 

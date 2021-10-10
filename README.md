@@ -85,8 +85,8 @@ public static class MainThreadDispatcher
 `class PlayerLoopSystemHelper`
   - `static bool Register(Type type, InsertPosition position, Type anchorType, PlayerLoopSystem.UpdateFunction action)`
 
-    Registers a `PlayerLoopSystem` with the given `type` and `action` in the `specified` position
-    relative to `anchorType`.
+    Registers a `PlayerLoopSystem` with the given `type` and `action` in
+    the specified `position` relative to `anchorType`.
 
     Returns `true` if `anchorType` was found and system was inserted successfully.
 
@@ -94,4 +94,4 @@ public static class MainThreadDispatcher
 
     Unregisters a `PlayerLoopSystem`.
 
-    Returns `true` if `type` was found and remove successfully.
+    Returns `true` if `type` was found and removed successfully.
