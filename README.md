@@ -95,3 +95,8 @@ public static class MainThreadDispatcher
     Unregisters a `PlayerLoopSystem`.
 
     Returns `true` if `type` was found and removed successfully.
+
+
+## Other projects for injecting callbacks in Unity's PlayerLoop
+- https://github.com/Refsa/PlayerLoopInjector
+- https://github.com/sotanmochi/PlayerLooper
