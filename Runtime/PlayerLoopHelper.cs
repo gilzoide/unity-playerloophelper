@@ -12,20 +12,33 @@ using static UnityEngine.LowLevel.PlayerLoopSystem;
 
 namespace PlayerLoopHelper
 {
+	/// <summary>Relative position for inserting a PlayerLoopSystem in the PlayerLoop tree</summary>
 	public enum InsertPosition
 	{
-		/// Insert system right before the specified one, as a sibling
+		/// <summary>Insert system right before the specified one, as a sibling</summary>
 		Before,
-		/// Insert system right after the specified one, as a sibling
+		/// <summary>Insert system right after the specified one, as a sibling</summary>
 		After,
-		/// Insert system as the first child of the specified one
+		/// <summary>Insert system as the first child of the specified one</summary>
 		FirstChildOf,
-		/// Insert system as the last child of the specified one
+		/// <summary>Insert system as the last child of the specified one</summary>
 		LastChildOf,
 	}
 
+	/// <summary>Helper class for registering/unregistering systems into Unity's PlayerLoop</summary>
 	public static class PlayerLoopSystemHelper
 	{
+		/// <summary>
+		/// Registers a PlayerLoopSystem with specified <paramref name="type"/> that will run the given
+		/// <paramref name="action"/>. The new system will be inserted in the given <paramref name="position"/>
+		/// relative to the PlayerLoopSystem associated with <paramref name="anchorType"/>.
+		/// </summary>
+		/// <param name="type">Type associated with new PlayerLoopSystem</param>
+		/// <param name="position">Position relative to <paramref name="anchorType"/> to insert new system</param>
+		/// <param name="anchorType">Type of the PlayerLoopSystem where new system should be inserted relative to</param>
+		/// <param name="action">Delegate that new system will run</param>
+		/// <returns>Whether PlayerLoopSystem associated with <paramref name="anchorType"/> was found 
+		/// in current PlayerLoop and the new system was registered successfully</returns>
 		public static bool Register(Type type, InsertPosition position, Type anchorType, UpdateFunction action)
 		{
 			PlayerLoopSystem rootPlayerLoopSystem = PlayerLoop.GetCurrentPlayerLoop();
@@ -37,6 +50,8 @@ namespace PlayerLoopHelper
 			return false;
 		}
 
+		/// <returns>Whether PlayerLoopSystem associated with <paramref name="anchorType"/> was found 
+		/// in current PlayerLoop and unregistered successfully</returns>
 		public static bool Unregister(Type type)
 		{
 			PlayerLoopSystem rootPlayerLoopSystem = PlayerLoop.GetCurrentPlayerLoop();
@@ -48,6 +63,7 @@ namespace PlayerLoopHelper
 			return false;
 		}
 
+		/// <returns>Whether a PlayerLoopSystem associated with <paramref name="type"/> was found in current PlayerLoop</returns>
 		public static bool IsRegistered(Type type)
 		{
 			PlayerLoopSystem rootPlayerLoopSystem = PlayerLoop.GetCurrentPlayerLoop();
