@@ -7,24 +7,6 @@ using PlayerLoopHelper;
 
 public class RuntimeTests
 {
-	[Test]
-	public void OnRegister_ReturnTrueIfAnchorTypeIsRegistered()
-	{
-		Assert.IsFalse(PlayerLoopSystemHelper.Register(
-			typeof(RuntimeTests),
-			InsertPosition.FirstChildOf,
-			typeof(MonoBehaviour),
-			Callback
-		));
-
-		Assert.IsTrue(PlayerLoopSystemHelper.Register(
-			typeof(RuntimeTests),
-			InsertPosition.FirstChildOf,
-			typeof(UnityEngine.PlayerLoop.Update),
-			Callback
-		));
-	}
-
 	[UnityTest]
 	public IEnumerator OnRegister_CallbackIsCalledOncePerFrame()
 	{
@@ -60,25 +42,19 @@ public class RuntimeTests
 		Assert.AreEqual(timesCallbackRan, 1);
 	}
 
-	[Test]
-	public void IsRegistered_ShouldReturnTrueIfTypeIsRegistered()
-	{
-		Assert.True(PlayerLoopSystemHelper.IsRegistered(typeof(UnityEngine.PlayerLoop.Update)));
-		Assert.True(PlayerLoopSystemHelper.IsRegistered(typeof(UnityEngine.PlayerLoop.PreUpdate)));
-	}
+	PlayerLoopSystem previousLoop;
 
-	[Test]
-	public void IsRegistered_ShouldReturnFalseIfTypeIsNotRegistered()
-	{
-		Assert.False(PlayerLoopSystemHelper.IsRegistered(typeof(RuntimeTests)));
-	}
-
+	[SetUp]
+	public void SaveCurrentLoop()
+    {
+        previousLoop = PlayerLoop.GetCurrentPlayerLoop();
+    }
 
 	[TearDown]
-	public void ResetVariables()
+	public void ResetPlayerLoopAndVariables()
 	{
 		timesCallbackRan = 0;
-		PlayerLoop.SetPlayerLoop(PlayerLoop.GetDefaultPlayerLoop());
+		PlayerLoop.SetPlayerLoop(previousLoop);
 	}
 
 	int timesCallbackRan;
