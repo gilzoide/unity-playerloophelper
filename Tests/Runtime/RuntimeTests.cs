@@ -60,6 +60,20 @@ public class RuntimeTests
 		Assert.AreEqual(timesCallbackRan, 1);
 	}
 
+	[Test]
+	public void IsRegistered_ShouldReturnTrueIfTypeIsRegistered()
+	{
+		Assert.True(PlayerLoopSystemHelper.IsRegistered(typeof(UnityEngine.PlayerLoop.Update)));
+		Assert.True(PlayerLoopSystemHelper.IsRegistered(typeof(UnityEngine.PlayerLoop.PreUpdate)));
+	}
+
+	[Test]
+	public void IsRegistered_ShouldReturnFalseIfTypeIsNotRegistered()
+	{
+		Assert.False(PlayerLoopSystemHelper.IsRegistered(typeof(RuntimeTests)));
+	}
+
+
 	[TearDown]
 	public void ResetVariables()
 	{

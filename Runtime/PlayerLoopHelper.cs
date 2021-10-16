@@ -8,6 +8,7 @@
  */
 using System;
 using UnityEngine.LowLevel;
+using static UnityEngine.LowLevel.PlayerLoopSystem;
 
 namespace PlayerLoopHelper
 {
@@ -25,17 +26,10 @@ namespace PlayerLoopHelper
 
 	public static class PlayerLoopSystemHelper
 	{
-		public static bool Register(Type type, InsertPosition position, Type anchorType, PlayerLoopSystem.UpdateFunction action)
+		public static bool Register(Type type, InsertPosition position, Type anchorType, UpdateFunction action)
 		{
 			PlayerLoopSystem rootPlayerLoopSystem = PlayerLoop.GetCurrentPlayerLoop();
-			var insertParams = new InsertParameters
-			{
-				type = type,
-				position = position,
-				anchorType = anchorType,
-				action = action
-			};
-			if (TryInsertSystemInList(ref rootPlayerLoopSystem.subSystemList, ref insertParams))
+			if (TryInsertSystemInList(ref rootPlayerLoopSystem.subSystemList, type, position, anchorType, action))
 			{
 				PlayerLoop.SetPlayerLoop(rootPlayerLoopSystem);
 				return true;
@@ -54,71 +48,74 @@ namespace PlayerLoopHelper
 			return false;
 		}
 
-		#region Private Implementation
-		private struct InsertParameters
+		public static bool IsRegistered(Type type)
 		{
-			public Type type;
-			public InsertPosition position;
-			public Type anchorType;
-			public PlayerLoopSystem.UpdateFunction action;
+			PlayerLoopSystem rootPlayerLoopSystem = PlayerLoop.GetCurrentPlayerLoop();
+			return FindSystemInList(ref rootPlayerLoopSystem.subSystemList, type, out int index) != NOT_FOUND;
 		}
 
-		private static bool TryInsertSystemInList(ref PlayerLoopSystem[] subSystemList, ref InsertParameters parameters)
+		#region Private Implementation
+		private static PlayerLoopSystem[] NOT_FOUND = null;
+
+		private static bool TryInsertSystemInList(ref PlayerLoopSystem[] subSystemList, Type type,
+				InsertPosition position, Type anchorType, UpdateFunction action)
 		{
-			for (int i = 0; i < subSystemList.Length; i++)
+			ref PlayerLoopSystem[] foundList = ref FindSystemInList(ref subSystemList, anchorType, out int index);
+			if (foundList != NOT_FOUND)
 			{
-				ref PlayerLoopSystem it = ref subSystemList[i];
-				if (it.type == parameters.anchorType)
+				var newSystem = new PlayerLoopSystem { type = type, updateDelegate = action };
+				switch (position)
 				{
-					var newSystem = new PlayerLoopSystem
-					{
-						type = parameters.type,
-						updateDelegate = parameters.action,
-					};
-					switch (parameters.position)
-					{
-						case InsertPosition.Before:
-							ArrayUtils.InsertInto(ref subSystemList, i, newSystem);
-							break;
+					case InsertPosition.Before:
+						ArrayUtils.InsertInto(ref foundList, index, newSystem);
+						break;
 
-						case InsertPosition.After:
-							ArrayUtils.InsertInto(ref subSystemList, i + 1, newSystem);
-							break;
+					case InsertPosition.After:
+						ArrayUtils.InsertInto(ref foundList, index + 1, newSystem);
+						break;
 
-						case InsertPosition.FirstChildOf:
-							ArrayUtils.PushFrontInto(ref subSystemList[i].subSystemList, newSystem);
-							break;
-						
-						case InsertPosition.LastChildOf:
-							ArrayUtils.PushBackInto(ref subSystemList[i].subSystemList, newSystem);
-							break;
-					}
-					return true;
+					case InsertPosition.FirstChildOf:
+						ArrayUtils.PushFrontInto(ref foundList[index].subSystemList, newSystem);
+						break;
+					
+					case InsertPosition.LastChildOf:
+						ArrayUtils.PushBackInto(ref foundList[index].subSystemList, newSystem);
+						break;
 				}
-				else if (!ArrayUtils.IsNullOrEmpty(it.subSystemList) && TryInsertSystemInList(ref it.subSystemList, ref parameters))
-				{
-					return true;
-				}
+				return true;
 			}
 			return false;
 		}
 
 		private static bool TryRemoveSystemFromList(ref PlayerLoopSystem[] subSystemList, Type anchorType)
 		{
+			ref PlayerLoopSystem[] foundList = ref FindSystemInList(ref subSystemList, anchorType, out int index);
+			if (foundList != NOT_FOUND)
+			{
+				ArrayUtils.RemoveFrom(ref foundList, index);
+				return true;
+			}
+			return false;
+		}
+
+		private static ref PlayerLoopSystem[] FindSystemInList(ref PlayerLoopSystem[] subSystemList, Type anchorType, out int index)
+		{
 			for (int i = 0; i < subSystemList.Length; i++)
 			{
 				ref PlayerLoopSystem it = ref subSystemList[i];
 				if (it.type == anchorType)
 				{
-					ArrayUtils.RemoveFrom(ref subSystemList, i);
-					return true;
+					index = i;
+					return ref subSystemList;
 				}
-				else if (!ArrayUtils.IsNullOrEmpty(it.subSystemList) && TryRemoveSystemFromList(ref it.subSystemList, anchorType))
+				else if (!ArrayUtils.IsNullOrEmpty(it.subSystemList))
 				{
-					return true;
+					ref PlayerLoopSystem[] foundList = ref FindSystemInList(ref it.subSystemList, anchorType, out index);
+					if (foundList != NOT_FOUND) return ref foundList;
 				}
 			}
-			return false;
+			index = 0;
+			return ref NOT_FOUND;
 		}
 		#endregion
 	}

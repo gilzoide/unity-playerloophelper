@@ -96,6 +96,10 @@ public static class MainThreadDispatcher
 
     Returns `true` if `type` was found and removed successfully.
 
+  - `static bool IsRegistered(Type type)`
+
+    Returns whether a `PlayerLoopSystem` with `type` is registered.
+
 
 ## Other projects for injecting callbacks in Unity's PlayerLoop
 - https://github.com/Refsa/PlayerLoopInjector
