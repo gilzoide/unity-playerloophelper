@@ -6,10 +6,10 @@ Single file helper class for registering/unregistering systems in [Unity](https:
 ## How to install
 Either:
 
-- In [Package Manager Window](https://docs.unity3d.com/Manual/upm-ui.html)
-  install using this repository's [Git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html):
+- In the [Package Manager Window](https://docs.unity3d.com/Manual/upm-ui.html),
+  install using this repository's [Git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html):<br/>
   `https://github.com/gilzoide/unity-playerloophelper.git`
-- Copy [PlayerLoopHelper.cs](Runtime/PlayerLoopHelper.cs) anywhere inside your project.
+- Copy the [PlayerLoopHelper.cs](Runtime/PlayerLoopHelper.cs) file anywhere inside your project.
 
 
 ## Usage example
@@ -88,13 +88,13 @@ public static class MainThreadDispatcher
     Registers a `PlayerLoopSystem` with the given `type` and `action` in
     the specified `position` relative to `anchorType`.
 
-    Returns `true` if `anchorType` was found and system was inserted successfully.
+    Returns whether `anchorType` was found and system was inserted successfully.
 
   - `static bool Unregister(Type type)`
 
     Unregisters a `PlayerLoopSystem`.
 
-    Returns `true` if `type` was found and removed successfully.
+    Returns whether `type` was found and removed successfully.
 
   - `static bool IsRegistered(Type type)`
 
